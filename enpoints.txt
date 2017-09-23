@@ -1,0 +1,6 @@
+The list of end-points,
+
+/groups *Lists all available groups.*
+/groups/{groupId}/participants *Lists all participants in a particular group*
+/{userId}/groups *Groups a particulat user is part in*
+/{userId}/groups/activity *Messages sent by user in all cclub groups*
