@@ -26,16 +26,18 @@ func (gc GroupController)AddUser(res http.ResponseWriter,req *http.Request,p htt
 		log.Fatal(err)
 	}
 	u:=models.User{}
+	fmt.Println("HELLO")
+	fmt.Println(req.Body)
 	json.NewDecoder(req.Body).Decode(&u)
 	fmt.Println(req.Body)
 	fmt.Println(u)
-	stmt, err := db.Prepare("INSERT IGNORE into users (userId,groupId) VALUES(?,?)")
-	result, err := stmt.Exec(u.UserId,u.GroupId)
+	stmt, err := db.Prepare("INSERT IGNORE into users (userId,groupId,groupName) VALUES(?,?,?)")
+	result, err := stmt.Exec(u.UserId,u.GroupId,u.GroupName)
 	if err!=nil{
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	fmt.Println(result)
-
+defer  db.Close()
 }
 
 
@@ -51,13 +53,15 @@ func(gc GroupController)GetGroups(res http.ResponseWriter,req *http.Request,p ht
 	for rows.Next(){
 		var userId string
 		var groupId string
-		err = rows.Scan(&userId, &groupId)
+		var groupName string
+		err = rows.Scan(&userId, &groupId,&groupName)
 		if err!=nil{
 			log.Fatal(err)
 		}
 
 		u.UserId=userId
 		u.GroupId=groupId
+		u.GroupName=groupName
 		ures=append(ures, u)
 	}
 

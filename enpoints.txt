@@ -7,4 +7,5 @@ The list of end-points,
 
 
 -----for testing----
-curl -X POST -H "Content-Type: applicaton/json" -d '{"UserId":"kabba","GroupId":"jabba"}' http://localhost:8080/user
+
+curl -X POST -H "Content-Type: applicaton/json" -d '{"UserId":"123456","GroupId":"1234567","GroupName":"123456"}' http://localhost:8080/user
