@@ -4,3 +4,7 @@ The list of end-points,
 /groups/{groupId}/participants *Lists all participants in a particular group*
 /{userId}/groups *Groups a particulat user is part in*
 /{userId}/groups/activity *Messages sent by user in all cclub groups*
+
+
+-----for testing----
+curl -X POST -H "Content-Type: applicaton/json" -d '{"UserId":"kabba","GroupId":"jabba"}' http://localhost:8080/user

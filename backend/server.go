@@ -16,6 +16,7 @@ func main(){
 	router.GET("/groups/groupinfo/:groupId/participants/",gc.GetGroupParticipants)
 	router.GET("/groups/userinfo/:userId/",gc.UserAllGroup)
 
+	router.POST("/user",gc.AddUser)
 
 //	router.GET("/activity/:userId/groups/",gc.UserAllGroupActivity)
 
