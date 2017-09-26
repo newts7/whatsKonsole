@@ -7,14 +7,16 @@ $(document).ready()
         if (conversation.__x_isGroup === true) {
             var groupName = conversation.__x_formattedTitle;
             var groupId = conversation.__x_id;
-            if (groupName.search("cclub AMA") != -1) {   /*If group is cclub then*/
+            if (groupName.search("cclub") != -1) {   /*If group is cclub then*/
 
                 var participants = conversation.__x_groupMetadata.participants.models;
                 console.log(participants);
+                if(participants.length===0)
+                    continue;
                 for (i in participants){
                     var userId=participants[i].__x_id;
                     console.log(userId+" "+groupId);
-                    if(userId.length===0)
+                    if(userId===undefined||groupId===undefined)
                         continue;
                     $.ajax({
                         type: 'POST',

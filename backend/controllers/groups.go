@@ -21,7 +21,7 @@ func NewGroupController() (*GroupController) {
 }
 
 func (gc GroupController)AddUser(res http.ResponseWriter,req *http.Request,p httprouter.Params){
-	db, err := sql.Open("mysql", "newts:newts@/whatsKonsole?charset=utf8")
+	db, err := sql.Open("mysql", "root:hello123@/whatsKonsole?charset=utf8")
 	if err!=nil{
 		log.Fatal(err)
 	}
@@ -43,7 +43,7 @@ defer  db.Close()
 
 
 func(gc GroupController)GetGroups(res http.ResponseWriter,req *http.Request,p httprouter.Params){
-	db, err := sql.Open("mysql", "newts:newts@/whatsKonsole?charset=utf8")
+	db, err := sql.Open("mysql", "root:hello123@/whatsKonsole?charset=utf8")
 	if err!=nil{
 		log.Fatal(err)
 	}
@@ -74,6 +74,7 @@ func(gc GroupController)GetGroups(res http.ResponseWriter,req *http.Request,p ht
 	fmt.Fprintln(res,string(uj))
 	defer db.Close()
 
+fmt.Println("hello")
 }
 
 func (gc GroupController)GetGroupParticipants(res http.ResponseWriter,req *http.Request,p httprouter.Params){
