@@ -42,7 +42,7 @@ defer  db.Close()
 
 
 
-func(gc GroupController)GetGroups(res http.ResponseWriter,req *http.Request,p httprouter.Params){
+func(gc GroupController)GetAllData(res http.ResponseWriter,req *http.Request,p httprouter.Params){
 	db, err := sql.Open("mysql", "root:hello123@/whatsKonsole?charset=utf8")
 	if err!=nil{
 		log.Fatal(err)
@@ -77,16 +77,123 @@ func(gc GroupController)GetGroups(res http.ResponseWriter,req *http.Request,p ht
 fmt.Println("hello")
 }
 
-func (gc GroupController)GetGroupParticipants(res http.ResponseWriter,req *http.Request,p httprouter.Params){
-	/*to be done*/
+func(gc GroupController)GetAllGroups(res http.ResponseWriter,req *http.Request,p httprouter.Params){
+
+	db, err := sql.Open("mysql", "root:hello123@/whatsKonsole?charset=utf8")
+	if err!=nil{
+		log.Fatal(err)
+	}
+	rows, err := db.Query("SELECT DISTINCT groupId,groupName from users")
+	ures:=make([]models.Group,0)
+	u:=models.Group{}
+	for rows.Next(){
+		var groupId string
+		var groupName string
+		err = rows.Scan(&groupId,&groupName)
+		if err!=nil{
+			log.Fatal(err)
+		}
+
+		u.GroupId=groupId
+		u.GroupName=groupName
+		ures=append(ures, u)
+	}
+
+	uj,err:=json.Marshal(ures)
+	if err!=nil{
+		log.Fatalln(err)
+	}
+	res.Header().Set("Content-Type", "application/json")
+	res.WriteHeader(http.StatusOK)
+	fmt.Fprintln(res,string(uj))
+	defer db.Close()
+
+
 }
 
-func(gc GroupController)UserAllGroup(res http.ResponseWriter,req *http.Request, p httprouter.Params){
+
+
+func (gc GroupController)GetGroupParticipants(res http.ResponseWriter,req *http.Request,p httprouter.Params){
+
+	var groupId=p.ByName("groupId")
+	fmt.Println(groupId)
+
+	db, err := sql.Open("mysql", "root:hello123@/whatsKonsole?charset=utf8")
+	if err!=nil{
+		log.Fatal(err)
+	}
+
+	queryStatement:="select DISTINCT userId,groupName from users WHERE groupId="+"\""+groupId+"\""
+	rows, err := db.Query(queryStatement)
+	ures:=make([]models.Participants,0)
+	u:=models.Participants{}
+	for rows.Next(){
+		var userId string
+		var groupName string
+		err = rows.Scan(&userId,&groupName)
+		if err!=nil{
+			log.Fatal(err)
+		}
+
+		u.UserId=userId
+		u.GroupName=groupName
+		ures=append(ures, u)
+	}
+
+	uj,err:=json.Marshal(ures)
+	if err!=nil{
+		log.Fatalln(err)
+	}
+	res.Header().Set("Content-Type", "application/json")
+	res.WriteHeader(http.StatusOK)
+	fmt.Fprintln(res,string(uj))
+	defer db.Close()
+
+}
+
+func(gc GroupController)GetGroupByUser(res http.ResponseWriter,req *http.Request, p httprouter.Params){
+	/*to be done*/
+
+	var userId=p.ByName("userId")
+	fmt.Println(userId)
+
+	db, err := sql.Open("mysql", "root:hello123@/whatsKonsole?charset=utf8")
+	if err!=nil{
+		log.Fatal(err)
+	}
+
+	queryStatement:="select DISTINCT userId,groupId,groupName from users WHERE userId="+"\""+userId+"\""
+	rows, err := db.Query(queryStatement)
+	ures:=make([]models.User,0)
+	u:=models.User{}
+	for rows.Next(){
+		var userId string
+		var groupId string
+		var groupName string
+		err = rows.Scan(&userId,&groupId,&groupName)
+		if err!=nil{
+			log.Fatal(err)
+		}
+		u.UserId=userId
+		u.GroupId=groupId
+		u.GroupName=groupName
+		ures=append(ures, u)
+	}
+
+	uj,err:=json.Marshal(ures)
+	if err!=nil{
+		log.Fatalln(err)
+	}
+	res.Header().Set("Content-Type", "application/json")
+	res.WriteHeader(http.StatusOK)
+	fmt.Fprintln(res,string(uj))
+	defer db.Close()
+
 
 }
 
 func(gc GroupController)UserAllGroupActivity(res http.ResponseWriter,req *http.Request, p httprouter.Params){
-
+/*to be done*/
 }
 
 
