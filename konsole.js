@@ -14,7 +14,17 @@ function main() {
         console.log(newMsg);
         if(isCommand(newMsg)) {
             console.log("It's a command");
-            process(newMsg);
+            switch (checktype(newMsg))
+            {
+                case 'i':console.log("individual");
+                    processIndividualMessage(newMsg);
+                    break;
+                case 'g': console.log("group");
+                    processGroupParticipants(newMsg);
+                    break;
+            }
+
+            //process(newMsg);
         }
     }
     else{
@@ -22,11 +32,17 @@ function main() {
     }
 }
 
+function checktype(newMsg) {
+    var c=newMsg[8];
+    console.log(c);
+    return c;
+}
+
 function checkMessage() {
     var chats = Store.Chat.models;
     for (chat in chats) {
         var conversation = chats[chat];
-        if (conversation.__x_formattedTitle === "cclub production") {
+        if (conversation.__x_formattedTitle ==="cclub production") {
             var messages = conversation.__x_previewMessage;
             var msgBody = messages.__x_body;
             var msgId = messages.__x_id.id;
@@ -48,8 +64,8 @@ function isCommand(newMsg){
         return false;
 }
 
-function process(newMsg) {
-    var res=newMsg.slice(7,newMsg.length);
+function processGroupParticipants(newMsg) {
+    var res=newMsg.slice(10,newMsg.length);
     var groupName="";
     var message="";
     var flag=false;
@@ -63,18 +79,80 @@ function process(newMsg) {
         else
             groupName=groupName+res[i];
     }
-    console.log(groupName);
+    console.log("group name is- "+groupName);
     console.log(groupName.length);
-    console.log(message);
+    console.log("message is- "+message);
 
     sendMessageToParticipants(groupName,message);
 }
 
+function processIndividualMessage(newMsg) {
+    var res=newMsg.slice(10,newMsg.length);
+    var individualName="";
+    var message="";
+    var flag=false;
+    for(var i=0;i<res.length;i++){
+        if(res[i]===','&&flag===false){
+            flag=true;
+            continue;
+        }
+        if(flag)
+            message=message+res[i];
+        else
+            individualName=individualName+res[i];
+    }
+    console.log("Individual id is- "+individualName);
+    console.log(individualName.length);
+    console.log("message is- "+message);
+
+    sendMessageToIndividual(individualName,message);
+}
+
+function sendMessageToIndividual(contact,message) {
+
+    var Chats = Store.Chat.models;
+    contact=contact+"@c.us";
+
+
+    flag = false;
+
+    for (chat in Chats) {
+        if (isNaN(chat)) {
+            continue;
+        }
+        ;
+        var temp = {};
+        temp.contact = Chats[chat].__x__formattedTitle;
+        temp.id = Chats[chat].__x_id;
+        if (temp.id.search(contact) != -1 ) {
+            flag = true;
+        }
+    }
+    console.log(contact);
+    if (!flag) {
+        Store.Chat.gadd(contact);
+    }
+
+    for (chat in Chats) {
+        if (isNaN(chat)) {
+            continue;
+        }
+        ;
+        var temp = {};
+        temp.contact = Chats[chat].__x__formattedTitle;
+        temp.id = Chats[chat].__x_id;
+        if (temp.id.search(contact) != -1 ) {
+            Chats[chat].sendMessage(message);
+
+        }
+    }
+
+}
 
 
 
 function sendMessageToParticipants(group,message) {
-        console.log(group);
+    console.log(group);
     var chats = Store.Chat.models;
     var map={};
 

@@ -42,7 +42,7 @@ function checkMessage() {
     var chats = Store.Chat.models;
     for (chat in chats) {
         var conversation = chats[chat];
-        if (conversation.__x_formattedTitle ==="Bot testing") {
+        if (conversation.__x_formattedTitle ==="cclub production") {
             var messages = conversation.__x_previewMessage;
             var msgBody = messages.__x_body;
             var msgId = messages.__x_id.id;
