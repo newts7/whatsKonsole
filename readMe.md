@@ -33,6 +33,32 @@ Move to backend directory and run followng command.
 $ go run server.go
 ```
 
+## Running Console
+
+* Open web.whatsapp.com on chrome and Login
+* Open Chrome Console.
+* Run Konsole.js in the group you want to turn into a console.
+
+
+## Commands Supported
+
+* **Broadcasting Message to all Group Participants via Bot**
+ ```apple js
+$ sudo -g groupName,Message    
+```
+
+* **Sending Direct Message to a user via Bot**
+```
+$ sudo -i userId,Message
+```
+
+## Scripts and their Usage
+
+* **Konsole.js** - Turns a group into console.
+* **groupInfo.js** - Feeds information of users in particular group into DataBase.
+* **PushMessage.js** - Seeds all unread Messages send to bot into a listening group.
+
+
 
 ## Deployment
 
