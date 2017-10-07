@@ -1,4 +1,4 @@
-# WhatsKonsole
+## WhatsKonsole
 
 The Project gives you a command line interface to connect people in your community 
 over WhatsApp.
@@ -37,7 +37,7 @@ $ go run server.go
 
 * Open web.whatsapp.com on chrome and Login
 * Open Chrome Console.
-* Run Konsole.js in the group you want to turn into a console.
+* Run Konsole.js for the group you want to turn into a console.
 
 
 ## Commands Supported
@@ -69,7 +69,7 @@ The project uses EC2 Windows Instance to run scripts.
 
 * [Javascript](https://www.javascript.com/) - Used to create scripts to interact with whatsapp API.
 * [Golang](https://golang.org/) - Used to create endpoints
-* [Mysql](https://www.mysql.com/) - Used to generate RSS Feeds
+* [Mysql](https://www.mysql.com/) - Used as database.
 
 
 ## Dataflow
