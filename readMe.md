@@ -1,4 +1,4 @@
-## WhatsKonsole
+# WhatsKonsole [![N|Solid](http://icons.iconarchive.com/icons/dtafalonso/android-l/128/WhatsApp-icon.png)]()
 
 The Project gives you a command line interface to connect people in your community 
 over WhatsApp.
