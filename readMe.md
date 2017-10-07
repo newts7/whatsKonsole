@@ -67,8 +67,8 @@ Master is our holy grail, Never directly push into master, create a pull request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License. 
 
 ##Risk factors
 
-* The cellphone from which bot is registered should be connected to internet.
+The cellphone from which bot is registered should be connected to internet.
