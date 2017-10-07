@@ -24,7 +24,7 @@ for(chat in chats) {
 function sendMessage(message) {
 
     var Chats = Store.Chat.models;
-    var groupName = "cclub /dev/testing";
+    var groupName = "cclub mouth";
 
 
     for (chat in Chats) {
