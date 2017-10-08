@@ -87,7 +87,7 @@ Master is our holy grail, Never directly push into master, create a pull request
 
 ## Authors
 
-* **Divyanshu Srivastava**  - [Github](https://github.com/newts7)
+* **Divyanshu Srivastava**  - [Github](https://github.com/newts7) - [Resume](https://newts7.github.io/resume.pdf)
 
 
 
