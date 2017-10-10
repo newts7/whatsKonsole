@@ -2,8 +2,8 @@ var processedMessages={};
 var time=30000;
 var dowork=setInterval(main,time);
 var firstrun=true;
-var consoleGroup="Bot testing production";
-var mouthGroup="Bot testing mouth";
+var consoleGroup="cclub production";
+var mouthGroup="cclub mouth";
 
 function main() {
     pushMessage();
