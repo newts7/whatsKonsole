@@ -1,30 +1,43 @@
-var chats=Store.Chat.models
-for(chat in chats) {
+var chats=Store.Chat.models;
+var ownId="917678138666@c.us";
+var toSendMessages=[];
+for(var chat=0;chat<chats.length;chat++) {
     var conversation = chats[chat];
-    if (conversation.__x_isUser === true) {
-        var pendingMessageCount = conversation.__x_unreadCount;
-        if (pendingMessageCount == 0)
-            continue;
-        //console.log(conversation);
-        var userName = conversation.__x_formattedTitle;
-        var userId = conversation.__x_id;
-        var firstMessageinConversation = conversation.__x_previewMessage;
-        var text = firstMessageinConversation.__x_body;
-        var isunRead = firstMessageinConversation.__x_isUnreadType;
-        var sender = firstMessageinConversation.__x_from;
-        if (isunRead){
-            //console.log(sender + " " + isunRead + " " + text);
-            var message=sender+" "+"says- "+text;
-            console.log(message);
-            sendMessage(message);
+    if (conversation.isUser) {
+        if(conversation.unreadCount>0)
+        {
+            var newMsgCount=conversation.unreadCount;
+            //console.log(newMsgCount);
+            var getMsgs=conversation.getAllMsgs();
+            ///console.log(getMsgs);
+            var unreadMsgs=getMsgs.splice(getMsgs.length-newMsgCount,getMsgs.length);
+            console.log(unreadMsgs);
+            for(var i=0;i<unreadMsgs.length;i++){
+                var Msg=unreadMsgs[i];
+                var sender=Msg.__x_from;
+                var body=Msg.__x_body;
+                if(sender!=ownId&&sender!=undefined){
+                    console.log("Sender is- "+sender);
+                    console.log("Message is- "+body);
+                    toSendMessages.push(sender+" says- "+body);
+                }
+            }
+            conversation.sendSeen();
         }
     }
 }
 
+console.log(toSendMessages);
+for (var i=0;i<toSendMessages.length;i++){
+    sendMessage((toSendMessages[i]));
+}
+
+
+
 function sendMessage(message) {
 
     var Chats = Store.Chat.models;
-    var groupName = "cclub mouth";
+    var groupName = "Bot testing";
 
 
     for (chat in Chats) {
