@@ -2,8 +2,11 @@ var processedMessages={};
 var time=30000;
 var dowork=setInterval(main,time);
 var firstrun=true;
+var consoleGroup="Bot testing production";
+var mouthGroup="Bot testing mouth";
 
 function main() {
+    pushMessage();
     var newMsg=checkMessage();
     if(firstrun){
         console.log("This was first run");
@@ -42,7 +45,7 @@ function checkMessage() {
     var chats = Store.Chat.models;
     for (chat in chats) {
         var conversation = chats[chat];
-        if (conversation.__x_formattedTitle ==="cclub production") {
+        if (conversation.__x_formattedTitle ===consoleGroup) {
             var messages = conversation.__x_previewMessage;
             var msgBody = messages.__x_body;
             var msgId = messages.__x_id.id;
@@ -235,6 +238,65 @@ function sendMessageToParticipants(group,message) {
         }
     }
 
+}
+
+function  pushMessage() {
+    var chats=Store.Chat.models;
+    var ownId="917678138666@c.us";
+    var toSendMessages=[];
+    for(var chat=0;chat<chats.length;chat++) {
+        var conversation = chats[chat];
+        if (conversation.isUser) {
+            if(conversation.unreadCount>0)
+            {
+                var newMsgCount=conversation.unreadCount;
+                //console.log(newMsgCount);
+                var getMsgs=conversation.getAllMsgs();
+                ///console.log(getMsgs);
+                var unreadMsgs=getMsgs.splice(getMsgs.length-newMsgCount,getMsgs.length);
+                console.log(unreadMsgs);
+                for(var i=0;i<unreadMsgs.length;i++){
+                    var Msg=unreadMsgs[i];
+                    var sender=Msg.__x_from;
+                    var body=Msg.__x_body;
+                    if(sender!=ownId&&sender!=undefined){
+                        console.log("Sender is- "+sender);
+                        console.log("Message is- "+body);
+                        toSendMessages.push(sender+" says- "+body);
+                    }
+                }
+                conversation.sendSeen();
+            }
+        }
+    }
+
+    console.log(toSendMessages);
+    for (var i=0;i<toSendMessages.length;i++){
+        sendMessage((toSendMessages[i]));
+    }
+
+
+
+    function sendMessage(message) {
+
+        var Chats = Store.Chat.models;
+        var groupName =mouthGroup;
+
+
+        for (chat in Chats) {
+            if (isNaN(chat)) {
+                continue;
+            };
+            //console.log(chat);
+            if (Chats[chat].__x_isGroup === true) {
+                if (Chats[chat].__x_formattedTitle == groupName) {
+
+                    Chats[chat].sendMessage(message);
+                };
+            }
+        }
+
+    };
 }
 
 
