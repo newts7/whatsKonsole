@@ -249,6 +249,7 @@ function  pushMessage() {
         if (conversation.isUser) {
             if(conversation.unreadCount>0)
             {
+                conversation.sendSeen();
                 var newMsgCount=conversation.unreadCount;
                 //console.log(newMsgCount);
                 var getMsgs=conversation.getAllMsgs();
@@ -259,13 +260,18 @@ function  pushMessage() {
                     var Msg=unreadMsgs[i];
                     var sender=Msg.__x_from;
                     var body=Msg.__x_body;
+                    var msgId=Msg.__x_id.id;
+                    if(msgId in processedMessages)
+                        continue;
+                    processedMessages[msgId]=true;
                     if(sender!=ownId&&sender!=undefined){
                         console.log("Sender is- "+sender);
                         console.log("Message is- "+body);
                         toSendMessages.push(sender+" says- "+body);
                     }
                 }
-                conversation.sendSeen();
+
+
             }
         }
     }
