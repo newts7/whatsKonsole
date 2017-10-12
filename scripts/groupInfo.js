@@ -1,5 +1,5 @@
 
-$(docu ment).ready()
+$(document).ready()
 {
     var chats = Store.Chat.models;
     for (chat in chats) {
