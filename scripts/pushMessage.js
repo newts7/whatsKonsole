@@ -37,7 +37,7 @@ for (var i=0;i<toSendMessages.length;i++){
 function sendMessage(message) {
 
     var Chats = Store.Chat.models;
-    var groupName = "Bot testing";
+    var groupName = "cclub mouth";
 
 
     for (chat in Chats) {
