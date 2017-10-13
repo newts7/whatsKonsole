@@ -1,4 +1,4 @@
-#How to Conduct an AMA
+## How to Conduct an AMA
 
 * Ask for questions from AMA participants- Use Konsole.js command from **cclub production**-
 ```
