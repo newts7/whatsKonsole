@@ -282,7 +282,6 @@ function  pushMessage() {
     }
 
 
-
     function sendMessage(message) {
 
         var Chats = Store.Chat.models;
