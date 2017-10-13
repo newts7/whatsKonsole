@@ -5,10 +5,12 @@ var processedMsgs={};
 var chats=Store.Chat.models;
 var time=30000;
 var doWork=setInterval(main,time);
-var speakerGroup="Testing 1";
-var amaGroups=["Testing AMA"];
+var speakerGroup="cclub speaker";
+var amaGroups=["cclub AMA testing 1","cclub AMA testing 2"];
 var speakerName="speakerName";
+var runCount=0;
 function main() {
+console.log(runCount);
 
 
 var toSendMessages=[];
@@ -54,9 +56,15 @@ var toSendMessages=[];
 
             }
         }
-
+        conversation.sendSeen();
     }
 
+if(runCount==0){
+        console.log("first run");
+        runCount++;
+        return ;
+}
+runCount++;
 
     console.log(toSendMessages);
     for (var i=0;i<toSendMessages.length;i++){
