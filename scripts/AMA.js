@@ -6,14 +6,14 @@ var chats=Store.Chat.models;
 var time=30000;
 var doWork=setInterval(main,time);
 var speakerGroup="cclub speaker";
-var amaGroups=["cclub AMA testing 1","cclub AMA testing 2"];
-var speakerName="speakerName";
+var amaGroups=["cclub AMA","cclub AMA 2","cclub AMA 3"];
+var speakerName="*Aishwarya Singh*";
 var mouthGroup="cclub mouth";
 var runCount=0;
 
 function main() {
 console.log(runCount);
-adminsToSpeaker();
+//adminsToSpeaker();
 speakerTochannels();
 runCount++;
 }
@@ -39,7 +39,7 @@ for(var i=0;i<amaGroups.length;i++) {
         ;
         //console.log(chat);
         if (Chats[chat].__x_isGroup === true) {
-            if (Chats[chat].__x_formattedTitle == groupName) {
+            if (Chats[chat].__x_formattedTitle === groupName) {
 
                 Chats[chat].sendMessage(message);
             }
@@ -49,7 +49,7 @@ for(var i=0;i<amaGroups.length;i++) {
 }
 
 function speakerTochannels(){
-
+console.log("speaker->channels");
     var toSendMessages=[];
     for (var i = 0; i < chats.length; i++) {
         var conversation = chats[i];
@@ -80,7 +80,9 @@ function speakerTochannels(){
                         var t_body=body.slice(1,body.length);
                         var finalMsg=speakerName+" says "+t_body;
                         console.log(finalMsg);
-                        toSendMessages.push(finalMsg);
+                       // toSendMessages.push(finalMsg);
+                        toSendMessages.push(t_body);
+
                     }
 
 
@@ -104,6 +106,7 @@ if(runCount===0)
 }
 
 function  adminsToSpeaker() {
+    console.log("admins->speaker");
     var chats=Store.Chat.models;
     var toSendMessages=[];
     for (var i = 0; i < chats.length; i++) {
@@ -167,7 +170,7 @@ function  sendMessageToSpeakerGroup(message) {
         };
         //console.log(chat);
         if (Chats[chat].__x_isGroup === true) {
-            if (Chats[chat].__x_formattedTitle == groupName) {
+            if (Chats[chat].__x_formattedTitle === groupName) {
 
                 Chats[chat].sendMessage(message);
             };
