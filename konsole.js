@@ -1,4 +1,11 @@
 var processedMessages={};
+var spamList={
+    "919045321537@c.us":true,
+    "16502898894@c.us":true,
+    "918218962520@c.us":true,
+    "917983354236@c.us":true,
+    "918860175382@c.us":true
+};
 var time=30000;
 var dowork=setInterval(main,time);
 var firstrun=true;
@@ -116,6 +123,10 @@ function sendMessageToIndividual(contact,message) {
     var Chats = Store.Chat.models;
     contact=contact+"@c.us";
 
+    if(contact in spamList){
+        console.log("Number is in spamList");
+        return ;
+    }
 
     flag = false;
 
@@ -175,6 +186,11 @@ function sendMessageToParticipants(group,message) {
                 for (i in participants) {
 
                     var userId = participants[i].__x_id;
+
+                    if(userId in spamList){
+                        console.log("Number in spam list");
+                        continue;
+                    }
 
                     if (userId === undefined || groupId === undefined)
                         continue;

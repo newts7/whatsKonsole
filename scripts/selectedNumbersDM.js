@@ -8,9 +8,11 @@ var spamList={
     "16502898894@c.us":true,
     "918218962520@c.us":true,
     "917983354236@c.us":true,
-}
+    "918860175382@c.us":true
+};
 var contacts=["917275493769@c.us",
              "919045321537@c.us",
+    "918860175382@c.us"
 ];
 
 function sendMessage()
