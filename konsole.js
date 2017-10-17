@@ -1,10 +1,8 @@
 var processedMessages={};
 var spamList={
-    "919045321537@c.us":true,
     "16502898894@c.us":true,
     "918218962520@c.us":true,
     "917983354236@c.us":true,
-    "918860175382@c.us":true
 };
 var time=30000;
 var dowork=setInterval(main,time);
