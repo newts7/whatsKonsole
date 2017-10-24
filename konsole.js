@@ -10,6 +10,13 @@ var firstrun=true;
 var consoleGroup="cclub production";
 var mouthGroup="cclub mouth";
 
+var amaFlag=false;
+var amaRunCount=0;
+var speakerGroup="cclub speaker";
+var amaGroups=["Bot testing 1","Bot testing 2","cclub AMA","cclub AMA 2","cclub AMA 3"];
+var speakerName="xyz";
+
+
 function main() {
     pushMessage();
     var newMsg=checkMessage();
@@ -30,6 +37,31 @@ function main() {
                 case 'g': console.log("group");
                     processGroupParticipants(newMsg);
                     break;
+                case 's': console.log("start a Service");
+                    console.log(newMsg);
+                    var serviceName=processService(newMsg);
+                    console.log(serviceName);
+                    switch(serviceName)
+                    {
+                        case 'ama':
+                            amaFlag=true;
+                            console.log("AMA service is started");
+                            break;
+                    }
+                    break;
+                case 'x' : console.log("stop a Service");
+                    console.log(newMsg);
+                    var serviceName=processService(newMsg);
+                    console.log(serviceName);
+                    switch(serviceName)
+                    {
+                        case 'ama':
+                            amaFlag=false;
+                            amaRunCount=0;
+                            console.log("AMA service is stopped");
+                            break;
+                    }
+                    break;
             }
 
             //process(newMsg);
@@ -38,6 +70,8 @@ function main() {
     else{
         console.log("No new Message to process");
     }
+    if(amaFlag)
+        ama();
 }
 
 function checktype(newMsg) {
@@ -318,3 +352,110 @@ function  pushMessage() {
     };
 }
 
+function processService(newMsg) {
+    var serviceName=newMsg.slice(10,newMsg.length);
+    serviceName=serviceName.toLowerCase();
+    return serviceName;
+}
+
+function ama()
+{
+
+    console.log("AMA chal raha hai bhaiya");
+    speakerTochannels();
+    amaRunCount++;
+}
+
+function  speakerTochannels()
+{
+    console.log("speaker->channels");
+    var toSendMessages=[];
+    var chats=Store.Chat.models;
+    for (var i = 0; i < chats.length; i++)
+    {
+        var conversation = chats[i];
+        if (conversation.__x_formattedTitle === speakerGroup)
+        {
+            if (conversation.unreadCount > 0)
+            {
+                var newMsgCount = conversation.unreadCount;
+                console.log(newMsgCount);
+                var getMsgs = conversation.getAllMsgs();
+                var unreadMsgs = getMsgs.splice(getMsgs.length - newMsgCount, getMsgs.length);
+                console.log(unreadMsgs);
+                isnewMsg=false;
+                for (var j = 0; j < unreadMsgs.length; j++) {
+                    var Msg = unreadMsgs[j];
+                    var sender = Msg.__x_author;
+                    var body = Msg.__x_body;
+                    var id = Msg.__x_id.id;
+                    if (id in processedMessages)
+                        continue;
+                    processedMessages[id] = true;
+                    var fromMe = Msg.__x_id.fromMe;
+                    if (fromMe)
+                        continue;
+                    console.log(Msg);
+                    if(isAMACommand(body)){
+                        console.log('Yes, from speaker and a command');
+                        console.log(sender);
+                        console.log(body);
+                        var t_body=body.slice(1,body.length);
+                        var finalMsg=speakerName+" says "+t_body;
+                        console.log(finalMsg);
+                        // toSendMessages.push(finalMsg);
+                        toSendMessages.push(t_body);
+
+                    }
+
+
+                }
+                if(!isnewMsg)
+                {
+                    console.log("No new Message to process in speaker group");
+                }
+
+            }
+        }
+        conversation.sendSeen();
+    }
+
+
+    if(amaRunCount===0)
+        return ;
+    console.log(toSendMessages);
+    for (var i=0;i<toSendMessages.length;i++){
+        sendMessageToAMA((toSendMessages[i]));
+    }
+
+}
+
+function sendMessageToAMA(message) {
+    for (var i = 0; i < amaGroups.length; i++) {
+        var Chats = Store.Chat.models;
+        var groupName = amaGroups[i];
+
+
+        for (chat in Chats) {
+            if (isNaN(chat)) {
+                continue;
+            }
+            ;
+            //console.log(chat);
+            if (Chats[chat].__x_isGroup === true) {
+                if (Chats[chat].__x_formattedTitle === groupName) {
+
+                    Chats[chat].sendMessage(message);
+                }
+            }
+        }
+    }
+}
+
+function  isAMACommand(body)
+{
+    if(body[0]=='#')
+        return true;
+    else
+        return false;
+}

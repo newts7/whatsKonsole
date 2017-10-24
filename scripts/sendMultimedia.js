@@ -29,7 +29,7 @@ function  sendMessage(unreadMsgs) {
         var groupName = conversation.__x_formattedTitle;
         if(groupName===recieverName)
         {
-           conversation.forwardMessages(unreadMsgs);
+            conversation.forwardMessages(unreadMsgs);
             break;
         }
     }
