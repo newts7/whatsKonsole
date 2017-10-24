@@ -21,7 +21,7 @@ for (chat in chats)
     }
 }
 
-function  sendMessage(unreadMsgs) {
+function  sendMessageMultimedia(unreadMsgs) {
     var recieverName="Bot testing 1";
     for (chat in chats)
     {

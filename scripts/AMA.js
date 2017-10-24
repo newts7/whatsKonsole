@@ -14,7 +14,7 @@ var runCount=0;
 function main()
 {
     console.log(runCount);
-    adminsToSpeaker();
+    //adminsToSpeaker();
     speakerTochannels();
     runCount++;
 }
@@ -87,6 +87,7 @@ console.log("speaker->channels");
                         continue;
                     console.log(Msg);
                     if(isCommand(body)){
+
                         console.log('Yes, from speaker and a command');
                         console.log(sender);
                         console.log(body);
@@ -95,6 +96,7 @@ console.log("speaker->channels");
                         console.log(finalMsg);
                        // toSendMessages.push(finalMsg);
                         toSendMessages.push(t_body);
+
 
                     }
 
