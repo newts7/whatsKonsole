@@ -3,6 +3,14 @@ var spamList={
     "16502898894@c.us":true,
     "918218962520@c.us":true,
     "917983354236@c.us":true,
+    "919414367835@c.us":true,
+    "919458046050@c.us":true,
+    "919997554207@c.us":true,
+    "918955333413@c.us":true,
+    "919008767748@c.us":true,
+    "919456889843@c.us":true,
+    "919627784730@c.us":true
+    
 };
 var time=30000;
 var dowork=setInterval(main,time);
