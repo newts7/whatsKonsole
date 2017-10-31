@@ -25,13 +25,15 @@ var amaRunCount=0;
 var speakerGroup="cclub speaker";
 var amaGroups=["Bot testing 1","Bot testing 2"];
 var speakerName="xyz";
-
+var logs=[];
 
 function main() {
     pushMessage();
     var newMsg=checkMessage();
     if(firstrun){
         console.log("This was first run");
+        logs.push("Hi I'm cclub admin, and yes I'm live !");
+        pushLog();
         firstrun=false;
         return ;
     }
@@ -42,12 +44,15 @@ function main() {
             switch (checktype(newMsg))
             {
                 case 'i':console.log("individual");
+                    logs.push("Individual message mode on!");
                     processIndividualMessage(newMsg);
                     break;
                 case 'g': console.log("group");
+                    logs.push("Group Message mode on!");
                     processGroupParticipants(newMsg);
                     break;
                 case 's': console.log("start a Service");
+                    logs.push("Starting a service! ");
                     console.log(newMsg);
                     var serviceName=processService(newMsg);
                     console.log(serviceName);
@@ -56,10 +61,12 @@ function main() {
                         case 'ama':
                             amaFlag=true;
                             console.log("AMA service is started");
+                            logs.push("AMA service is started!");
                             break;
                         case 'rd':
                             duplicateFlag=true;
                             console.log("Remove Duplicate mode is on");
+                            logs.push("Remove Duplicate service is started!");
                             break;
                     }
                     break;
@@ -73,11 +80,13 @@ function main() {
                             amaFlag=false;
                             amaRunCount=0;
                             console.log("AMA service is stopped");
+                            logs.push("AMA service is stopped !");
                             break;
                         case 'rd':
                             duplicateFlag=true;
                             duplicateList={};
                             console.log("Remove Duplicate mode is off");
+                            logs.push("Remove Duplicate service is stopped! ");
                             break;
                     }
                     break;
@@ -91,6 +100,7 @@ function main() {
     }
     if(amaFlag)
         ama();
+    pushLog();
 }
 
 function checktype(newMsg) {
@@ -220,7 +230,7 @@ function sendMessageToParticipants(group,message) {
     console.log(group);
     var chats = Store.Chat.models;
     var map={};
-
+    var totalDelivery=0;
 
     for (chat in chats) {
         var conversation = chats[chat];
@@ -255,6 +265,7 @@ function sendMessageToParticipants(group,message) {
                             duplicateList[userId]=true;
                         }
                     }
+
 
                     console.log(userId + " " + groupId);
 
@@ -296,8 +307,11 @@ function sendMessageToParticipants(group,message) {
 
                                 if (temp.id in map)
                                     continue;
-                                else
-                                    map[temp.id]=true;Chats[chat].sendMessage(message);
+                                else {
+                                    map[temp.id] = true;
+                                    Chats[chat].sendMessage(message);
+                                    totalDelivery++;
+                                }
                                 console.log(temp.id);
                                 break;
                             }
@@ -316,6 +330,7 @@ function sendMessageToParticipants(group,message) {
         }
     }
 
+    logs.push("Total Successful Deliveries -"+totalDelivery);
 }
 
 function  pushMessage() {
@@ -449,24 +464,24 @@ function  speakerTochannels()
     if(amaRunCount===0)
         return ;
     console.log(toSendMessages);
-sendMessageMultimedia(toSendMessages);
+    sendMessageMultimedia(toSendMessages);
 }
 
 function  sendMessageMultimedia(unreadMsgs) {
 
- for(var i=0;i<amaGroups.length;i++) {
-     var recieverName=amaGroups[i];
-     var chats=Store.Chat.models;
-     for (chat in chats) {
-         var conversation = chats[chat];
-         var groupName = conversation.__x_formattedTitle;
-         if (groupName === recieverName) {
-             conversation.forwardMessages(unreadMsgs);
-             break;
-         }
-     }
- }
- }
+    for(var i=0;i<amaGroups.length;i++) {
+        var recieverName=amaGroups[i];
+        var chats=Store.Chat.models;
+        for (chat in chats) {
+            var conversation = chats[chat];
+            var groupName = conversation.__x_formattedTitle;
+            if (groupName === recieverName) {
+                conversation.forwardMessages(unreadMsgs);
+                break;
+            }
+        }
+    }
+}
 
 function  isAMACommand(body)
 {
@@ -475,3 +490,23 @@ function  isAMACommand(body)
     else
         return false;
 }
+
+function pushLog() {
+
+    for( var i=0;i<logs.length;i++){
+        sendMessageToGroup(consoleGroup,logs[i]);
+    }
+    logs=[];
+}
+
+function  sendMessageToGroup(groupName,message) {
+    var chats = Store.Chat.models;
+    for (chat in chats) {
+        var conversation = chats[chat];
+        if (conversation.__x_formattedTitle ===groupName) {
+          conversation.sendMessage(message);
+        }
+    }
+}
+
+
