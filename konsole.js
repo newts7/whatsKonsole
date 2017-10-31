@@ -1,4 +1,5 @@
 var processedMessages={};
+var duplicateList={};
 var spamList={
     "16502898894@c.us":true,
     "918218962520@c.us":true,
@@ -10,7 +11,6 @@ var spamList={
     "919008767748@c.us":true,
     "919456889843@c.us":true,
     "919627784730@c.us":true
-    
 };
 var time=30000;
 var dowork=setInterval(main,time);
@@ -19,9 +19,11 @@ var consoleGroup="cclub production";
 var mouthGroup="cclub mouth";
 
 var amaFlag=false;
+var duplicateFlag=false;
+
 var amaRunCount=0;
 var speakerGroup="cclub speaker";
-var amaGroups=["Bot testing 1","Bot testing 2","cclub AMA","cclub AMA 2","cclub AMA 3"];
+var amaGroups=["Bot testing 1","Bot testing 2"];
 var speakerName="xyz";
 
 
@@ -55,6 +57,10 @@ function main() {
                             amaFlag=true;
                             console.log("AMA service is started");
                             break;
+                        case 'rd':
+                            duplicateFlag=true;
+                            console.log("Remove Duplicate mode is on");
+                            break;
                     }
                     break;
                 case 'x' : console.log("stop a Service");
@@ -67,6 +73,11 @@ function main() {
                             amaFlag=false;
                             amaRunCount=0;
                             console.log("AMA service is stopped");
+                            break;
+                        case 'rd':
+                            duplicateFlag=true;
+                            duplicateList={};
+                            console.log("Remove Duplicate mode is off");
                             break;
                     }
                     break;
@@ -234,6 +245,17 @@ function sendMessageToParticipants(group,message) {
 
                     if (userId === undefined || groupId === undefined)
                         continue;
+
+                    if(duplicateFlag===true){
+                        if(userId in duplicateList){
+                            console.log(userId+" is in duplicate list ");
+                            continue;
+                        }
+                        else{
+                            duplicateList[userId]=true;
+                        }
+                    }
+
                     console.log(userId + " " + groupId);
 
                     //Addded message part here*
@@ -406,14 +428,9 @@ function  speakerTochannels()
                     console.log(Msg);
                     if(isAMACommand(body)){
                         console.log('Yes, from speaker and a command');
-                        console.log(sender);
-                        console.log(body);
-                        var t_body=body.slice(1,body.length);
-                        var finalMsg=speakerName+" says "+t_body;
-                        console.log(finalMsg);
-                        // toSendMessages.push(finalMsg);
-                        toSendMessages.push(t_body);
-
+                        console.log(Msg);
+                        console.log(Msg.quotedMsgObj());
+                        toSendMessages.push(Msg.quotedMsgObj());
                     }
 
 
@@ -432,29 +449,20 @@ function  speakerTochannels()
     if(amaRunCount===0)
         return ;
     console.log(toSendMessages);
-    for (var i=0;i<toSendMessages.length;i++){
-        sendMessageToAMA((toSendMessages[i]));
-    }
-
+    sendMessageMultimedia(toSendMessages);
 }
 
-function sendMessageToAMA(message) {
-    for (var i = 0; i < amaGroups.length; i++) {
-        var Chats = Store.Chat.models;
-        var groupName = amaGroups[i];
+function  sendMessageMultimedia(unreadMsgs) {
 
-
-        for (chat in Chats) {
-            if (isNaN(chat)) {
-                continue;
-            }
-            ;
-            //console.log(chat);
-            if (Chats[chat].__x_isGroup === true) {
-                if (Chats[chat].__x_formattedTitle === groupName) {
-
-                    Chats[chat].sendMessage(message);
-                }
+    for(var i=0;i<amaGroups.length;i++) {
+        var recieverName=amaGroups[i];
+        var chats=Store.Chat.models;
+        for (chat in chats) {
+            var conversation = chats[chat];
+            var groupName = conversation.__x_formattedTitle;
+            if (groupName === recieverName) {
+                conversation.forwardMessages(unreadMsgs);
+                break;
             }
         }
     }

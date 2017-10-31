@@ -1,8 +1,16 @@
 var processedMessages={};
+var duplicateList={};
 var spamList={
     "16502898894@c.us":true,
     "918218962520@c.us":true,
     "917983354236@c.us":true,
+    "919414367835@c.us":true,
+    "919458046050@c.us":true,
+    "919997554207@c.us":true,
+    "918955333413@c.us":true,
+    "919008767748@c.us":true,
+    "919456889843@c.us":true,
+    "919627784730@c.us":true
 };
 var time=30000;
 var dowork=setInterval(main,time);
@@ -11,6 +19,8 @@ var consoleGroup="cclub production";
 var mouthGroup="cclub mouth";
 
 var amaFlag=false;
+var duplicateFlag=false;
+
 var amaRunCount=0;
 var speakerGroup="cclub speaker";
 var amaGroups=["Bot testing 1","Bot testing 2"];
@@ -47,6 +57,10 @@ function main() {
                             amaFlag=true;
                             console.log("AMA service is started");
                             break;
+                        case 'rd':
+                            duplicateFlag=true;
+                            console.log("Remove Duplicate mode is on");
+                            break;
                     }
                     break;
                 case 'x' : console.log("stop a Service");
@@ -59,6 +73,11 @@ function main() {
                             amaFlag=false;
                             amaRunCount=0;
                             console.log("AMA service is stopped");
+                            break;
+                        case 'rd':
+                            duplicateFlag=true;
+                            duplicateList={};
+                            console.log("Remove Duplicate mode is off");
                             break;
                     }
                     break;
@@ -226,6 +245,17 @@ function sendMessageToParticipants(group,message) {
 
                     if (userId === undefined || groupId === undefined)
                         continue;
+
+                    if(duplicateFlag===true){
+                        if(userId in duplicateList){
+                            console.log(userId+" is in duplicate list ");
+                            continue;
+                        }
+                        else{
+                            duplicateList[userId]=true;
+                        }
+                    }
+
                     console.log(userId + " " + groupId);
 
                     //Addded message part here*
