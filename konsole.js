@@ -17,6 +17,7 @@ var dowork=setInterval(main,time);
 var firstrun=true;
 var consoleGroup="cclub production";
 var mouthGroup="cclub mouth";
+var feedbackGroup="cclub feedback";
 
 var amaFlag=false;
 var duplicateFlag=false;
@@ -67,6 +68,10 @@ function main() {
                             duplicateFlag=true;
                             console.log("Remove Duplicate mode is on");
                             logs.push("Remove Duplicate service is started!");
+                            break;
+                        case 'f':
+                            mouthGroup=feedbackGroup;
+                            logs.push("Feedback mode is started replies will now be pushed to feedback group");
                             break;
                     }
                     break;
