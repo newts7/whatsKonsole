@@ -10,7 +10,9 @@ var spamList={
     "918955333413@c.us":true,
     "919008767748@c.us":true,
     "919456889843@c.us":true,
-    "919627784730@c.us":true
+    "919627784730@c.us":true,
+    "918826654535@c.us":true,
+    "917060447169@c.us":true
 };
 var time=30000;
 var dowork=setInterval(main,time);
@@ -27,7 +29,7 @@ var duplicateFlag=false;
 
 var amaRunCount=0;
 var speakerGroup="cclub speaker";
-var amaGroups=["Bot testing 1","Bot testing 2"];
+var amaGroups=["Bot testing 1","Bot testing 2","cclub AMA","cclub AMA 2","cclub AMA 3","cclub AMA 4"];
 var speakerName="xyz";
 var logs=[];
 
