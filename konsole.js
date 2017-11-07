@@ -16,6 +16,9 @@ var time=30000;
 var dowork=setInterval(main,time);
 var firstrun=true;
 var consoleGroup="cclub production";
+
+var recieveGroup="cclub mouth";
+
 var mouthGroup="cclub mouth";
 var feedbackGroup="cclub feedback";
 
@@ -70,7 +73,7 @@ function main() {
                             logs.push("Remove Duplicate service is started!");
                             break;
                         case 'f':
-                            mouthGroup=feedbackGroup;
+                            recieveGroup=feedbackGroup;
                             logs.push("Feedback mode is started replies will now be pushed to feedback group");
                             break;
                     }
@@ -92,6 +95,10 @@ function main() {
                             duplicateList={};
                             console.log("Remove Duplicate mode is off");
                             logs.push("Remove Duplicate service is stopped! ");
+                            break;
+                        case 'f':
+                            recieveGroup=mouthGroup;
+                            logs.push("Feedback mode is stopped replies will now be pushed to mouth group");
                             break;
                     }
                     break;
@@ -383,7 +390,7 @@ function  pushMessage() {
     function sendMessage(message) {
 
         var Chats = Store.Chat.models;
-        var groupName =mouthGroup;
+        var groupName =recieveGroup;
 
 
         for (chat in Chats) {
