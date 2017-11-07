@@ -29,7 +29,7 @@ var duplicateFlag=false;
 
 var amaRunCount=0;
 var speakerGroup="cclub speaker";
-var amaGroups=["Bot testing 1","Bot testing 2","cclub AMA","cclub AMA 2","cclub AMA 3","cclub AMA 4"];
+var amaGroups=["Bot testing 1","Bot testing 2"];
 var speakerName="xyz";
 var logs=[];
 
@@ -375,6 +375,14 @@ function  pushMessage() {
                         console.log("Sender is- "+sender);
                         console.log("Message is- "+body);
                         toSendMessages.push(sender+" says- "+body);
+                        $.ajax({
+                            type: 'POST',
+                            url: 'http://search-elasticsearch-cclub-lkbc5wtkdx76ijfw2w237hvmum.us-east-1.es.amazonaws.com/whatsapp/GROUP/',
+                            data: JSON.stringify ({message: body,sender:sender,id:msgId,type:"DM"}),//
+                            success: function(data) {console.log(data); },
+                            contentType: "application/json; charset=utf-8",
+                            dataType: 'json'
+                        });
                     }
                 }
 
@@ -460,6 +468,17 @@ function  speakerTochannels()
                         console.log(Msg);
                         console.log(Msg.quotedMsgObj());
                         toSendMessages.push(Msg.quotedMsgObj());
+
+                        //Posting to this  server
+  /*                      $.ajax({
+                            type: 'POST',
+                            url: 'https://search-elasticsearch-cclub-lkbc5wtkdx76ijfw2w237hvmum.us-east-1.es.amazonaws.com/',
+                            data: JSON.stringify(Msg.quotedMsgObj), // or JSON.stringify ({name: 'jonas'}),
+                            success: function(data) {console.log(data); },
+                            contentType: "application/json; charset=utf-8",
+                            dataType: 'json'
+                        });
+*/
                     }
 
 
