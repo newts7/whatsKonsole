@@ -21,8 +21,11 @@ var consoleGroup="cclub production";
 
 var recieveGroup="cclub mouth";
 
+var mode="DM";
 var mouthGroup="cclub mouth";
 var feedbackGroup="cclub feedback";
+var amaQuestionGroup="cclub ama questions";
+
 
 var amaFlag=false;
 var duplicateFlag=false;
@@ -66,6 +69,8 @@ function main() {
                     {
                         case 'ama':
                             amaFlag=true;
+                            mode="ama";
+                            recieveGroup=amaQuestionGroup;
                             console.log("AMA service is started");
                             logs.push("AMA service is started!");
                             break;
@@ -76,6 +81,7 @@ function main() {
                             break;
                         case 'f':
                             recieveGroup=feedbackGroup;
+                            mode="feedback";
                             logs.push("Feedback mode is started replies will now be pushed to feedback group");
                             break;
                     }
@@ -89,6 +95,8 @@ function main() {
                         case 'ama':
                             amaFlag=false;
                             amaRunCount=0;
+                            recieveGroup=mouthGroup;
+                            mode="DM";
                             console.log("AMA service is stopped");
                             logs.push("AMA service is stopped !");
                             break;
@@ -100,6 +108,7 @@ function main() {
                             break;
                         case 'f':
                             recieveGroup=mouthGroup;
+                            mode="DM";
                             logs.push("Feedback mode is stopped replies will now be pushed to mouth group");
                             break;
                     }
@@ -378,7 +387,7 @@ function  pushMessage() {
                         $.ajax({
                             type: 'POST',
                             url: 'http://search-elasticsearch-cclub-lkbc5wtkdx76ijfw2w237hvmum.us-east-1.es.amazonaws.com/whatsapp/GROUP/',
-                            data: JSON.stringify ({message: body,sender:sender,id:msgId,type:"DM"}),//
+                            data: JSON.stringify ({message: body,sender:sender,id:msgId,type:mode}),//
                             success: function(data) {console.log(data); },
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json'
