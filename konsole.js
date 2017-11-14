@@ -1,4 +1,5 @@
 var processedMessages = {};
+var processedEvents={};
 var duplicateList = {};
 var spamList = {
   "16502898894@c.us": true,
@@ -42,6 +43,7 @@ var logs = [];
 
 function main() {
   pushMessage();
+  analytics();
   var newMsg = checkMessage();
   if (firstrun) {
     console.log("This was first run");
@@ -181,6 +183,7 @@ function main() {
   if (amaFlag)
     ama();
   pushLog();
+
 }
 
 function checktype(newMsg) {
@@ -602,4 +605,55 @@ function sendMessageToGroup(groupName, message) {
       conversation.sendMessage(message);
     }
   }
+}
+
+function analytics() {
+    leaveJoin();
+}
+
+function leaveJoin() {
+    var chats=Store.Chat.models;
+     var toSendMessages = [];
+for( var i=0;i<chats.length;i++) {
+    var conversation = chats[i];
+    if(isNaN(i))
+    {
+        continue;
+    }
+    var isGroup = conversation.__x_isGroup;
+    var groupName=conversation.__x_formattedTitle;
+    if(isGroup){
+        if(groupName.search("cclub")!=-1){
+            var msgs=conversation.getAllMsgs();
+            for(var j=0; j<msgs.length;j++){
+                var  msg=msgs[j];
+                var msgId=msg.__x_id.id;
+                var type=msg.__x_type;
+                var subtype=msg.__x_subtype;
+                if(msgId in processedEvents){
+                  continue;
+                }
+                processedEvents[msgId]=true;
+                if(type=="gp2"&&(subtype=="add"||subtype=="invite"||subtype=="leave")){
+                    console.log(msg);
+                    var recipient=msg.__x_recipients[0];
+                    console.log(groupName+" - "+recipient+" - "+subtype);
+                    if(subtype=="add"||subtype=="invite")
+                    toSendMessages.push(recipient+" joined "+groupName);
+                    else
+                      toSendMessages.push(recipient+" left "+groupName);
+                }
+            }
+        }
+    }
+}
+
+if(firstrun)
+  return ;
+else {
+  for(var i=0;i<toSendMessages.length;i++){
+    sendMessageToGroup("cclub events",toSendMessages[i]);
+  }
+}
+
 }
