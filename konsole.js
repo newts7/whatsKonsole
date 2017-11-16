@@ -444,7 +444,7 @@ function pushMessage() {
               type: 'POST',
               url: 'http://search-elasticsearch-cclub-lkbc5wtkdx76ijfw2w237hvmum.us-east-1.es.amazonaws.com/whatsapp/GROUP/',
               data: JSON.stringify({
-                message: body,
+                message: JSON.stringify(Msg),
                 sender: sender,
                 id: msgId,
                 type: mode
