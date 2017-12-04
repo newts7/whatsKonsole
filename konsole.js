@@ -612,6 +612,8 @@ function analytics() {
 }
 
 function leaveJoin() {
+    var leavefolks={};
+    var joinfolks={};
     var chats=Store.Chat.models;
      var toSendMessages = [];
 for( var i=0;i<chats.length;i++) {
@@ -638,10 +640,14 @@ for( var i=0;i<chats.length;i++) {
                     console.log(msg);
                     var recipient=msg.__x_recipients[0];
                     console.log(groupName+" - "+recipient+" - "+subtype);
-                    if(subtype=="add"||subtype=="invite")
-                    toSendMessages.push(recipient+" joined "+groupName);
-                    else
-                      toSendMessages.push(recipient+" left "+groupName);
+                    if(subtype=="add"||subtype=="invite") {
+                        toSendMessages.push(recipient + " joined " + groupName);
+                        joinfolks[recipient]=groupName;
+                    }
+                    else {
+                        toSendMessages.push(recipient + " left " + groupName);
+                        leavefolks[recipient]=groupName;
+                    }
                 }
             }
         }
@@ -653,7 +659,19 @@ if(firstrun)
 else {
   for(var i=0;i<toSendMessages.length;i++){
     sendMessageToGroup("cclub events",toSendMessages[i]);
+    for(var i in leavefolks)
+    {
+      var number=i.replace('@c.us','');
+      var message="Hi, Prachi this side from cclub and apologies if " +
+          "I am bothering You. \n\n"
+          +"I noticed that you recently left "+
+          leavefolks[i]+
+          " group. Could you help us understand what we can do" +
+          "better to stay relevant to you ?";
+        sendMessageToIndividual(number,message);
+    }
   }
+
 }
 
 }

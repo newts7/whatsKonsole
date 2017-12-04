@@ -5,7 +5,7 @@ driver = webdriver.Chrome(path)
 driver.get("https://web.whatsapp.com/")
 for i in range(1, 10):
     if i == 0:
-        time.sleep(30)
+        time.sleep(30000)
     result = driver.execute_script("return Store.Chat.models[2]")
     print result
     print "\n"
