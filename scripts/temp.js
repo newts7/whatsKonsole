@@ -1,3 +1,6 @@
+
+
+
 var processedMessages = {};
 var processedEvents={};
 var duplicateList = {};
@@ -38,6 +41,12 @@ var duplicateFlag = false;
 var amaRunCount = 0;
 var speakerGroup = "cclub speaker";
 var amaGroups = ["Bot testing 1", "Bot testing 2","cclub AMA","cclub AMA 2","cclub AMA 3","cclub AMA 4"];
+
+var amaRecipient=[
+    '918285698087@c.us',
+    '919986942939@c.us',    
+]
+
 var speakerName = "xyz";
 var logs = [];
 
@@ -568,6 +577,12 @@ function speakerTochannels() {
 
 function sendMessageMultimedia(unreadMsgs) {
 
+    for( var i=0;i<amaRecipient.length;i++)
+    {
+        sendMessageUsingForward(amaRecipient[i],unreadMsgs);
+    }
+
+/*
   for (var i = 0; i < amaGroups.length; i++) {
     var recieverName = amaGroups[i];
     var chats = Store.Chat.models;
@@ -580,7 +595,12 @@ function sendMessageMultimedia(unreadMsgs) {
       }
     }
   }
+*/
+
 }
+
+
+
 
 function isAMACommand(body) {
   if (body[0] == '#')
@@ -673,5 +693,49 @@ else {
   }
 
 }
+
+}
+
+
+function  sendMessageUsingForward(id,messages) {
+
+    var Chats = Store.Chat.models;
+    var contact = id;
+
+    flag = false;
+
+    for (chat in Chats) {
+        if (isNaN(chat)) {
+            continue;
+        }
+        ;
+        var temp = {};
+        temp.id = Chats[chat].__x_id;
+        if (temp.id===id) {
+            flag = true;
+        }
+    }
+    if (!flag) {
+        Store.Chat.gadd(contact);
+    }
+
+    for (chat in Chats) {
+        if (isNaN(chat)) {
+            continue;
+        }
+        ;
+        var temp = {};
+        temp.id = Chats[chat].__x_id;
+        if (temp.id===id) {
+            console.log("Forwarding Message");
+            try{
+                Chats[chat].forwardMessages(messages);
+            }catch(e){
+
+                console.log("Maa chudao");
+            }
+        }
+    }
+
 
 }

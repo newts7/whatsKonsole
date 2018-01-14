@@ -14,7 +14,7 @@ for (chat in chats)
             ///console.log(getMsgs);
             var unreadMsgs=getMsgs.splice(getMsgs.length-newMsgCount,getMsgs.length);
             console.log(unreadMsgs);
-            sendMessage(unreadMsgs);
+            sendMessageMultimedia(unreadMsgs);
 
             conversation.sendSeen();
         }
