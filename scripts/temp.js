@@ -43,14 +43,24 @@ var speakerGroup = "cclub speaker";
 var amaGroups = ["Bot testing 1", "Bot testing 2","cclub AMA","cclub AMA 2","cclub AMA 3","cclub AMA 4"];
 
 var amaRecipient=[
-    '918285698087@c.us',
-    '919986942939@c.us',    
-]
+    '919045321537@c.us',
+    '917678138666@c.us'
+];
 
 var speakerName = "xyz";
 var logs = [];
+var lock= false;
 
 function main() {
+
+console.log("Printing value of lock");
+console.log(lock);
+  if(lock == true){
+  console.log("Clearing new thread of main ");
+  return ;
+  }
+
+
   pushMessage();
   analytics();
   var newMsg = checkMessage();
@@ -449,21 +459,21 @@ function pushMessage() {
             console.log("Sender is- " + sender);
             console.log("Message is- " + body);
             toSendMessages.push(sender + " says- " + body);
-            $.ajax({
-              type: 'POST',
-              url: 'http://search-elasticsearch-cclub-lkbc5wtkdx76ijfw2w237hvmum.us-east-1.es.amazonaws.com/whatsapp/GROUP/',
-              data: JSON.stringify({
-                message: JSON.stringify(Msg),
-                sender: sender,
-                id: msgId,
-                type: mode
-              }), //
-              success: function(data) {
-                console.log(data);
-              },
-              contentType: "application/json; charset=utf-8",
-              dataType: 'json'
-            });
+//            $.ajax({
+//              type: 'POST',
+//              url: 'http://search-elasticsearch-cclub-lkbc5wtkdx76ijfw2w237hvmum.us-east-1.es.amazonaws.com/whatsapp/GROUP/',
+//              data: JSON.stringify({
+//                message: JSON.stringify(Msg),
+//                sender: sender,
+//                id: msgId,
+//                type: mode
+//              }), //
+//              success: function(data) {
+//                console.log(data);
+//              },
+//              contentType: "application/json; charset=utf-8",
+//              dataType: 'json'
+//            });
           }
         }
 
@@ -539,6 +549,9 @@ function speakerTochannels() {
           if (fromMe)
             continue;
           console.log(Msg);
+          if(unreadMsgs[j].__x_isMedia){
+          continue;
+          }
           if (isAMACommand(body)) {
             console.log('Yes, from speaker and a command');
             console.log(Msg);
@@ -572,15 +585,34 @@ function speakerTochannels() {
   if (amaRunCount === 0)
     return;
   console.log(toSendMessages);
+
+if(toSendMessages.length>0){
+console.log("I was here sending ama message to students");
+   lock = true;
   sendMessageMultimedia(toSendMessages);
+}
 }
 
 function sendMessageMultimedia(unreadMsgs) {
 
-    for( var i=0;i<amaRecipient.length;i++)
+    /*for( var i=0;i<amaRecipient.length;i++)
     {
         sendMessageUsingForward(amaRecipient[i],unreadMsgs);
+    }*/
+    console.log("Inside Send Message Multimedia");
+    var index = 0;
+    var writeAma = setInterval(function(){
+    console.log(index);
+    if(index ==  amaRecipient.length){
+    console.log("Reseting lock");
+    clearInterval(writeAma);
+    lock = false;
     }
+    console.log("Sending AMA message to user number");
+    console.log(index);
+    sendMessageUsingForward(amaRecipient[index],unreadMsgs);
+    index++;
+    },500);
 
 /*
   for (var i = 0; i < amaGroups.length; i++) {
