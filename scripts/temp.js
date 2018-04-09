@@ -42,14 +42,19 @@ var amaRunCount = 0;
 var speakerGroup = "cclub speaker";
 var amaGroups = ["Bot testing 1", "Bot testing 2","cclub AMA","cclub AMA 2","cclub AMA 3","cclub AMA 4"];
 
-var amaRecipient=[
-    '919045321537@c.us',
-    '917678138666@c.us'
-];
+var amaRecipient=[];
 
 var speakerName = "xyz";
 var logs = [];
 var lock= false;
+var actionGroups = {
+"#stop" : "action #stop",
+"#groups" : "action #groups",
+"#group" : "action #groups",
+"#cclub" : "action #cclub",
+"#invite" : "action #invite",
+"#careerchat" : "action #careerchat"
+};
 
 function main() {
 
@@ -485,8 +490,18 @@ function pushMessage() {
   console.log(toSendMessages);
   for (var i = 0; i < toSendMessages.length; i++) {
     sendMessage((toSendMessages[i]));
+    pushAction(toSendMessages[i]);
   }
 
+function pushAction(message){
+
+for (i in actionGroups){
+if (message.search(i)!=-1){
+sendMessageToGroup(actionGroups[i],message);
+}
+}
+
+}
 
   function sendMessage(message) {
 
@@ -612,7 +627,7 @@ function sendMessageMultimedia(unreadMsgs) {
     console.log(index);
     sendMessageUsingForward(amaRecipient[index],unreadMsgs);
     index++;
-    },500);
+    },1000);
 
 /*
   for (var i = 0; i < amaGroups.length; i++) {
