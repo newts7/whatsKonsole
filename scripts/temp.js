@@ -49,11 +49,11 @@ var logs = [];
 var lock= false;
 var actionGroups = {
 "#stop" : "action #stop",
-"#groups" : "action #groups",
 "#group" : "action #groups",
 "#cclub" : "action #cclub",
 "#invite" : "action #invite",
-"#careerchat" : "action #careerchat"
+"#careerchat" : "action #careerchat",
+"#bugreport" : "action #bugreport"
 };
 
 function main() {
@@ -64,7 +64,8 @@ console.log(lock);
   console.log("Clearing new thread of main ");
   return ;
   }
-
+console.log(">> Setting lock for this thread <<");
+lock = true;
 
   pushMessage();
   analytics();
@@ -73,6 +74,7 @@ console.log(lock);
     console.log("This was first run");
     logs.push("*WhatsKonsole* is live!");
     pushLog();
+    lock = false;
     firstrun = false;
     return;
   }
@@ -207,7 +209,7 @@ console.log(lock);
   if (amaFlag)
     ama();
   pushLog();
-
+lock = false;
 }
 
 function checktype(newMsg) {
@@ -490,8 +492,15 @@ function pushMessage() {
   console.log(toSendMessages);
   for (var i = 0; i < toSendMessages.length; i++) {
     sendMessage((toSendMessages[i]));
-    pushAction(toSendMessages[i]);
+
   }
+
+   for (var i = 0; i < toSendMessages.length; i++) {
+    pushAction((toSendMessages[i]));
+  }
+
+  }
+
 
 function pushAction(message){
 
@@ -523,7 +532,7 @@ sendMessageToGroup(actionGroups[i],message);
     }
 
   };
-}
+
 
 function processService(newMsg) {
   var serviceName = newMsg.slice(10, newMsg.length);
@@ -602,8 +611,7 @@ function speakerTochannels() {
   console.log(toSendMessages);
 
 if(toSendMessages.length>0){
-console.log("I was here sending ama message to students");
-   lock = true;
+console.log(">>>Sending message of ama started <<<");
   sendMessageMultimedia(toSendMessages);
 }
 }
@@ -619,9 +627,8 @@ function sendMessageMultimedia(unreadMsgs) {
     var writeAma = setInterval(function(){
     console.log(index);
     if(index ==  amaRecipient.length){
-    console.log("Reseting lock");
+    console.log("This message of ama has been delivered");
     clearInterval(writeAma);
-    lock = false;
     }
     console.log("Sending AMA message to user number");
     console.log(index);
@@ -675,7 +682,7 @@ function sendMessageToGroup(groupName, message) {
 }
 
 function analytics() {
-    leaveJoin();
+   // leaveJoin();
 }
 
 function leaveJoin() {

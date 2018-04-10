@@ -12,3 +12,6 @@ for (chat in chats){
         }
     }
 }
+
+
+I will, any low end smartphone with dual app support would work, looking for it on olx.
