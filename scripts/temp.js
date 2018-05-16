@@ -42,7 +42,57 @@ var amaRunCount = 0;
 var speakerGroup = "cclub speaker";
 var amaGroups = ["Bot testing 1", "Bot testing 2","cclub AMA","cclub AMA 2","cclub AMA 3","cclub AMA 4"];
 
-var amaRecipient=[];
+var amaRecipient=[
+"917017442837@c.us",
+"917060074865@c.us",
+"917060089287@c.us",
+"917062104893@c.us",
+"917275713337@c.us",
+"917351031789@c.us",
+"917408819341@c.us",
+"917417404864@c.us",
+"917508377468@c.us",
+"917726070662@c.us",
+"917830587779@c.us",
+"917877791648@c.us",
+"917895897614@c.us",
+"918050801851@c.us",
+"918077340641@c.us",
+"918090951024@c.us",
+"918130147947@c.us",
+"918130578146@c.us",
+"918171788911@c.us",
+"918173824682@c.us",
+"918187908277@c.us",
+"918285188034@c.us",
+"918431790909@c.us",
+"918510013428@c.us",
+"918560896373@c.us",
+"918650274962@c.us",
+"918696989408@c.us",
+"918947974807@c.us",
+"919030640469@c.us",
+"919044872861@c.us",
+"919045028187@c.us",
+"919045126055@c.us",
+"919166900752@c.us",
+"919205850237@c.us",
+"919414147939@c.us",
+"919415751180@c.us",
+"919456889843@c.us",
+"919458402319@c.us",
+"919458587718@c.us",
+"919462687021@c.us",
+"919465274585@c.us",
+"919587860183@c.us",
+"919598200227@c.us",
+"919611257907@c.us",
+"919650428789@c.us",
+"919672207368@c.us",
+"919811678842@c.us",
+"919917741206@c.us",
+"923088898200@c.us"
+];
 
 var speakerName = "xyz";
 var logs = [];
@@ -657,10 +707,15 @@ function sendMessageMultimedia(unreadMsgs) {
 
 
 function isAMACommand(body) {
+ try{
   if (body[0] == '#')
     return true;
   else
     return false;
+}
+catch(e){
+return false;
+}
 }
 
 function pushLog() {
