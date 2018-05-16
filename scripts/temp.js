@@ -559,7 +559,6 @@ if (message.search(i)!=-1){
 sendMessageToGroup(actionGroups[i],message);
 }
 }
-
 }
 
   function sendMessage(message) {

@@ -67,6 +67,68 @@ var final_type = [];
 var overAllUnreadMessages = [];
 var dowrite = 0;
 
+/*urgent actions */
+
+var hashtag_stop = "You have unsubscribed from cclub updates.";
+var hashtag_readings = "*#readings* \n- find what others are reading, watching.\n- pick up the habit of reading via audio recordings and texts";
+var hashtag_podcasts = "*#podcasts*\n- get reading recommendations on #topics you like.\n- share books from members near you.";
+var hashtag_invite = "*#invite* \n- send a phone number or email to invite friends.\n- if you have many friends who want to join, type";
+var hashtag_invitelink = "*#invitelink*  \n- if you want to invite institutions or college, write to us.";
+var hashtag_conservation = "*#conservation*- \nlearn how to grow flowers, fruits and vegetables on your rooftop. \n- stay informed about climate change and what you can do about it.";
+var hashtag_group = "*#groups* - learn about our other active groups of people in cclub.\n- *#conservation* to learn rooftop farming + pay attention to climate change \n- *#readings* to see what others are reading and how you can start.\n- *#internships* to work on real projects during college or to find a job.\n- *#careerchat* to join our weekly whatsapp interviews of industry experts.";
+var hashtag_internships = "*#internships*\n- find more likeminded people to collaborate\n- work on real world projects to add weight to your CV.\n- do 5 internships with us and we will help you get a job";
+var hashtag_careerchat = "We will get back to you shortly. :)";
+var hashtag_bugreport ="We will get back to you shortly. :)";
+var hashtag_cclub = "We will get back to you shortly";
+
+var actionGroups = {
+"#stop" : {
+              "group":  "action #stop",
+              "template":hashtag_stop
+           },
+
+"#readings": {
+                "group":"action #readings",
+                "template": hashtag_readings
+              }  ,
+"#podcasts": {
+                "group" :  "action #podcasts",
+                "template":hashtag_podcasts
+                },
+"#invite": {
+                "group" :  "action #invite",
+                "template":hashtag_invite
+                },
+"#invitelink": {
+                "group" :  "action #invitelink",
+                "template":hashtag_invitelink
+                },
+"#conservation": {
+                "group" :  "action #conservation",
+                "template":hashtag_conservation
+                },
+"#internship": {
+                "group" :  "action #internships",
+                "template":hashtag_internships
+                },
+"#group": {
+                "group" :  "action #groups",
+                "template":hashtag_group
+                },
+"#cclub": {
+                "group" :  "action #cclub",
+                "template":hashtag_cclub
+                },
+"#careerchat": {
+                "group" :  "action #careerchat",
+                "template":hashtag_careerchat
+                },
+"#bugreport": {
+                "group" :  "action #bugreport",
+                "template":hashtag_bugreport
+                },
+};
+var final_sender = [];
 
 function main() {
 
@@ -477,6 +539,7 @@ function pushMessage() {
             console.log("Sender is- " + sender);
             console.log("Message is- " + body);
             toSendMessages.push(sender + " says- " + body);
+            final_sender.push(sender);
 //            $.ajax({
 //              type: 'POST',
 //              url: 'http://search-elasticsearch-cclub-lkbc5wtkdx76ijfw2w237hvmum.us-east-1.es.amazonaws.com/whatsapp/GROUP/',
@@ -502,8 +565,32 @@ function pushMessage() {
 
   console.log(toSendMessages);
   for (var i = 0; i < toSendMessages.length; i++) {
-    sendMessage((toSendMessages[i]));
+    sendMessage(toSendMessages[i]);
+console.log("\nEvaluating Actions\n")
+     for (var i = 0; i < toSendMessages.length; i++) {
+    pushAction(toSendMessages[i],final_sender[i]);
   }
+
+
+  }
+
+  function pushAction(message,sender){
+for (i in actionGroups){
+console.log(i);
+console.log(message);
+message = message.toLowerCase();
+console.log(message.indexOf(i));
+if (message.indexOf(i)!=-1){
+console.log(i+" is found");
+console.log("Action group - "+actionGroups[i]['group']);
+console.log("Message template-"+actionGroups[i]['template'])
+sendMessageToGroup(actionGroups[i]['group'],message);
+sender = sender.replace('@c.us','');
+sendMessageToIndividual(sender,actionGroups[i]['template']);
+}
+}
+}
+
 
 
   function sendMessage(message) {
