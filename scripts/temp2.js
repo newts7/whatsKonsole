@@ -571,7 +571,7 @@ console.log("\nEvaluating Actions\n")
     pushAction(toSendMessages[i],final_sender[i]);
   }
 
-
+final_sender=[];
   }
 
   function pushAction(message,sender){
